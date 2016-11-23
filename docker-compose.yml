@@ -5,9 +5,9 @@ services:
     restart: always
     container_name: dmoney-core
     build: docker/core
+    image: crypto/core
     env_file:
       - .env
-      - .env-seed
     links:
       - postgres
     depends_on:
@@ -21,6 +21,7 @@ services:
     restart: always
     container_name: dmoney-horizon
     build: docker/horizon
+    image: crypto/horizon
     ports:
       - "8000:8000"
     links:
@@ -28,13 +29,13 @@ services:
       - redis
     depends_on:
       - postgres
+    env_file:
+      - .core-cfg
     environment:
       DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/horizon?sslmode=disable"
       STELLAR_CORE_DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/stellar?sslmode=disable"
-      BANK_MASTER_KEY: ${BANK_MASTER_KEY}
-      BANK_COMMISSION_KEY: ${BANK_COMMISSION_KEY}
       NETWORK_PASSPHRASE: ${NETWORK_PASSPHRASE}
-      STELLAR_CORE_URL: "http://core:11626"
+      STELLAR_CORE_URL: "http://core:${STELLAR_HTTP_PORT}"
       REDIS_URL: "redis://redis:6379"
       LOG_LEVEL: "info"
       INGEST: "true"

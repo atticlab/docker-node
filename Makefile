@@ -1,3 +1,4 @@
+ARGS = $(filter-out $@,$(MAKECMDGOALS))
 CONTAINERS = $(shell docker ps -a -q)
 VOLUMES = $(shell docker volume ls |awk 'NR>1 {print $2}')
 
@@ -10,19 +11,37 @@ purge:
 	docker volume rm $(VOLUMES)
 
 build:
-	@if [ ! -f ./.env-seed ]; then \
-		echo "Quorum configuration missing. Run 'make single' or 'make cluster'"; \
+	docker-compose build
+
+start: build
+	@if [ ! -s ./.core-cfg ]; then \
+	 	echo "Error: node is not configured! Run make <agent|gate|validator> first"; \
+	else \
+		docker-compose up -d; \
     fi
-	@if [ -f ./.env-seed ]; then \
-		docker-compose build && docker-compose up -d; \
+
+keypair: build
+	docker run --rm crypto/core src/stellar-core --genseed
+
+gate: build
+	./scripts/setup.sh
+
+agent: build
+	./scripts/setup.sh
+
+validator: build
+	./scripts/setup.sh --is-validator
+
+validator-add: stop
+	@if [ ! -s ./.core-cfg ]; then \
+	 	echo "Error: node is not configured! Run make <agent|gate|validator> first"; \
+	else \
+		./scripts/validators.sh --add=${ARGS}; \
     fi
 
-single: clean
-	@echo "Secret seed: SDM6BM4BR57WTZA5GKBDNHUMBRVUYKELT4AGJY7DMQIY6MRYMKR5ZDLQ"
-	@echo "Public: GCEGVROC6PXDVEIA4273I2ACN7YEMSRWLUN46YJUXWDXT5ITM4OEE5WF"
-	@read -p "Enter node seed(will be saved to env file): " seed; echo "NODE_SEED=$$seed" >> ./.env-seed
-
-cluster: clean
-	./scripts/prompt.sh
-
-.PHONY: help build clean
+validator-remove: stop
+	@if [ ! -s ./.core-cfg ]; then \
+	 	echo "Error: node is not configured! Run make <agent|gate|validator> first"; \
+	else \
+		./scripts/validators.sh --remove=${ARGS}; \
+    fi
