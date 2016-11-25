@@ -3,7 +3,7 @@
 All settings are generated via sh script and stored in **.core-cfg** file in repository's root directory.
 There's also a **.env** file which stores some settings, but those are static and you will probably do not need to change those.
 
-> If you need to regenerate config file, delete .core-cfg file or simply clear it's contents. You'll get the prompts on next build
+> If you need to regenerate config file delete .core-cfg file or simply clear it's contents. You'll get the prompts on next build
 
 To start any node you first need to generate several keypairs (master key, bank commission key etc). Run `make keypair` to generate those.
 
@@ -21,7 +21,7 @@ This public key can be added as validator to other nodes in the network.
 
 Run `make validator-add <PUBLIC_KEY>` or  `make validator-remove <PUBLIC_KEY>` to add or remove validator respectively.
 > **Note:**
-This operation will automatically stop the node. Be sure to run `make start` to run a node again
+If your node is already running, this operation will automatically stop it. Be sure to run `make start` to run a node again
 
 ### Starting node
 
