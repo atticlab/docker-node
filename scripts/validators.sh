@@ -73,4 +73,7 @@ echo "OK"
 
 # Remove prev validators lines
 sed -i '/^VALIDATORS=.*/d' ./.core-cfg
-echo "VALIDATORS=[$OUTPUT]" >> ./.core-cfg
+
+if [[ $OUTPUT != '' ]]; then
+    echo "VALIDATORS=[$OUTPUT]" >> ./.core-cfg
+fi

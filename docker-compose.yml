@@ -6,8 +6,11 @@ services:
     container_name: dmoney-core
     build: docker/core
     image: crypto/core
+    ports:
+      - "${STELLAR_HTTP_PORT}:${STELLAR_HTTP_PORT}"
     env_file:
       - .env
+      - .core-cfg
     links:
       - postgres
     depends_on:

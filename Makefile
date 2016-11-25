@@ -5,6 +5,9 @@ VOLUMES = $(shell docker volume ls |awk 'NR>1 {print $2}')
 stop:
 	docker-compose stop
 
+attach:
+	docker exec -i -t ${c} /bin/bash
+
 purge:
 	docker stop $(CONTAINERS)
 	docker rm $(CONTAINERS)

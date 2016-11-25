@@ -75,7 +75,11 @@ while true
 do
     read -ra peer -p "Add preferred peer (empty line to finish): "
     if [[ $peer == '' ]]; then
-        break
+        if [[ $IS_VALIDATOR == 'true' ]]; then
+            break
+        else
+            echo "You need to add at least one peer"
+        fi
     fi
 
     peer=${peer,,}
@@ -108,4 +112,7 @@ echo "NODE_SEED=$SEED" >> ./.core-cfg
 echo "NODE_IS_VALIDATOR=$IS_VALIDATOR" >> ./.core-cfg
 echo "BANK_MASTER_KEY=$MASTER_KEY" >> ./.core-cfg
 echo "BANK_COMMISSION_KEY=$COMISSION_KEY" >> ./.core-cfg
-echo "PREFERRED_PEERS=[$PEERS]" >> ./.core-cfg
+
+if [[ $PEERS != '' ]]; then
+    echo "PREFERRED_PEERS=[$PEERS]" >> ./.core-cfg
+fi
