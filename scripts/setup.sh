@@ -1,5 +1,6 @@
 #!/bin/bash
 
+HOST_REGEX='http(s?):\/\/((\w+\.)?\w+\.\w+|((2[0-5]{2}|1[0-9]{2}|[0-9]{1,2})\.){3}(2[0-5]{2}|1[0-9]{2}|[0-9]{1,2}))(\/)?(\:(\d){1,5})?'
 GENSEED="$(docker run --rm crypto/core src/stellar-core --genseed)"
 SEED=${GENSEED:13:56}
 PUBLIC=${GENSEED:78:56}
@@ -7,6 +8,7 @@ IS_VALIDATOR='false'
 MASTER_KEY=''
 COMISSION_KEY=''
 PEERS=''
+RIAK_HOST=''
 
 # Parse args
 for i in "$@"
@@ -70,7 +72,6 @@ do
     fi
 done
 
-regex='http(s?):\/\/((\w+\.)?\w+\.\w+|((2[0-5]{2}|1[0-9]{2}|[0-9]{1,2})\.){3}(2[0-5]{2}|1[0-9]{2}|[0-9]{1,2}))(\/)?(\:(\d){1,5})?'
 while true
 do
     read -ra peer -p "Add preferred peer (empty line to finish): "
@@ -85,7 +86,7 @@ do
     peer=${peer,,}
     exists="$(strpos \"$PEERS\" \"$peer\")"
 
-    if [[ ! $peer =~ $regex ]]
+    if [[ ! $peer =~ $HOST_REGEX ]]
     then
         echo "Error: Peer address [$peer] is not valid!"
         continue
@@ -98,9 +99,21 @@ do
     PEERS+=\"${peer// }\",
 done
 
-if [[ $PEERS != '' ]]; then
-    PEERS=${PEERS::-1}
-fi
+while true
+do
+    read -ra peer -p "Riak Host: "
+    peer=${peer,,}
+
+    if [[ ! $peer =~ $HOST_REGEX ]]
+    then
+        echo "Error: Peer address [$peer] is not valid!"
+        continue
+    fi
+
+    RIAK_HOST+=${peer// }
+    break
+done
+
 
 rm -f ./.core-cfg
 
@@ -108,11 +121,12 @@ echo "**************************************************************************
 echo "Node public key [$PUBLIC]"
 echo "**************************************************************************"
 
+echo "RIAK_HOST=$RIAK_HOST" >> ./.core-cfg
 echo "NODE_SEED=$SEED" >> ./.core-cfg
 echo "NODE_IS_VALIDATOR=$IS_VALIDATOR" >> ./.core-cfg
 echo "BANK_MASTER_KEY=$MASTER_KEY" >> ./.core-cfg
 echo "BANK_COMMISSION_KEY=$COMISSION_KEY" >> ./.core-cfg
 
 if [[ $PEERS != '' ]]; then
-    echo "PREFERRED_PEERS=[$PEERS]" >> ./.core-cfg
+    echo "PREFERRED_PEERS=[${PEERS::-1}]" >> ./.core-cfg
 fi

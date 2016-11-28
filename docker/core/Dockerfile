@@ -23,7 +23,8 @@ RUN git submodule init \
 	&& make \
 	&& make install
 
+RUN mkdir /scripts
 
-COPY ./entrypoint.sh /
+COPY ./scripts /scripts
 
-CMD ["/entrypoint.sh"]
+CMD ["/scripts/entrypoint.sh"]
