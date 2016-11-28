@@ -70,15 +70,15 @@ do
     fi
 done
 
-regex='https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)'
+regex='http(s?):\/\/((\w+\.)?\w+\.\w+|((2[0-5]{2}|1[0-9]{2}|[0-9]{1,2})\.){3}(2[0-5]{2}|1[0-9]{2}|[0-9]{1,2}))(\/)?(\:(\d){1,5})?'
 while true
 do
     read -ra peer -p "Add preferred peer (empty line to finish): "
     if [[ $peer == '' ]]; then
-        if [[ $IS_VALIDATOR == 'true' ]]; then
-            break
-        else
+        if [[ $PEERS == '' ]]; then
             echo "You need to add at least one peer"
+        else
+            break
         fi
     fi
 
