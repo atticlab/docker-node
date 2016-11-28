@@ -14,6 +14,7 @@ purge:
 	docker volume rm $(VOLUMES)
 
 build:
+	@touch .core-cfg
 	docker-compose build
 
 start: build
