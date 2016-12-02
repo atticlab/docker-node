@@ -2,21 +2,17 @@
 
 if [ -z "$1" ]
   then
-    echo "Usage get.sh PATH FILENAME"
+    echo "Usage get.sh KEY FILENAME"
     exit 0
 fi
 
 if [ -z "$2" ]
   then
-    echo "Usage get.sh PATH FILENAME"
+    echo "Usage get.sh KEY FILENAME"
     exit 0
 fi
 
-FILE_TO_GET=$2
-DEST_PATH=$(echo $1 | sed 's/\//\%2f/g')
-RIAK_COMMAND="buckets/${RIAK_BUCKET}/keys/${DEST_PATH}"
+DEST_PATH=$(echo $1 | base64)
 
-FULL_CMD="curl -sf ${RIAK_HOST}/${RIAK_COMMAND} -o $2"
-
-#run the command
-(eval "${FULL_CMD}") > /dev/null 2>&1
+curl -sf $RIAK_HOST/buckets/$RIAK_BUCKET/keys/$DEST_PATH -o $2
+exit
