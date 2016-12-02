@@ -1,18 +1,10 @@
 #!/bin/bash
 
-if [ -z "$1" ]
-  then
-    echo "Usage get.sh KEY FILENAME"
-    exit 0
+if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ]; then
+    echo "Usage get.sh HOST BUCKET KEY FILE"
+    exit 1
 fi
 
-if [ -z "$2" ]
-  then
-    echo "Usage get.sh KEY FILENAME"
-    exit 0
-fi
-
-DEST_PATH=$(echo $1 | base64)
-
-curl -sf $RIAK_HOST/buckets/$RIAK_BUCKET/keys/$DEST_PATH -o $2
+KEY=$(echo $3 | base64)
+curl $1/buckets/$2/keys/$KEY -o $4
 exit

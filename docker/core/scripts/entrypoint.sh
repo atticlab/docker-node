@@ -27,8 +27,8 @@ elif [[ $NODE_IS_VALIDATOR == 'true' ]]; then
 fi
 
 echo "[HISTORY.riak]"                                                           >> $HOME/core.cfg
-echo "get=\"/scripts/riakget.sh $NETWORK_PASSPHRASE_{0} {1}\""                  >> $HOME/core.cfg
-echo "put=\"/scripts/riakput.sh {0} $NETWORK_PASSPHRASE_{1}\""                  >> $HOME/core.cfg
+echo "get=\"/scripts/riakget.sh $RIAK_HOST $RIAK_BUCKET $NETWORK_PASSPHRASE_{0} {1}\""                  >> $HOME/core.cfg
+echo "put=\"/scripts/riakput.sh $RIAK_HOST $RIAK_BUCKET {0} $NETWORK_PASSPHRASE_{1}\""                  >> $HOME/core.cfg
 
 TABLE_EXISTS=`psql -d $DB_NAME -A -c "SELECT count(*) from information_schema.tables WHERE table_name = 'accounts'" | head -2 | tail -1`
 if [[ $TABLE_EXISTS == 1 ]]; then
