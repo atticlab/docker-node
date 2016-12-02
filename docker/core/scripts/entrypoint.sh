@@ -27,8 +27,9 @@ elif [[ $NODE_IS_VALIDATOR == 'true' ]]; then
 fi
 
 echo "[HISTORY.riak]"                                                           >> $HOME/core.cfg
-echo "get=\"/scripts/riakget.sh $RIAK_HOST $RIAK_BUCKET $NETWORK_PASSPHRASE_{0} {1}\""                  >> $HOME/core.cfg
-echo "put=\"/scripts/riakput.sh $RIAK_HOST $RIAK_BUCKET {0} $NETWORK_PASSPHRASE_{1}\""                  >> $HOME/core.cfg
+echo "get=\"/scripts/riakget.sh $RIAK_HOST $RIAK_BUCKET $NETWORK_PASSPHRASE_{0} {1}\""      >> $HOME/core.cfg
+echo "put=\"/scripts/riakput.sh $RIAK_HOST $RIAK_BUCKET {0} $NETWORK_PASSPHRASE_{1}\""      >> $HOME/core.cfg
+echo "mkdir=\"mkdir -p {0}\""                                                               >> $HOME/core.cfg
 
 TABLE_EXISTS=`psql -d $DB_NAME -A -c "SELECT count(*) from information_schema.tables WHERE table_name = 'accounts'" | head -2 | tail -1`
 if [[ $TABLE_EXISTS == 1 ]]; then
@@ -37,8 +38,9 @@ if [[ $TABLE_EXISTS == 1 ]]; then
     src/stellar-core --conf $HOME/core.cfg
 elif [[ $TABLE_EXISTS == 0 ]]; then
     echo "INITIALIZING STELLAR DB"
-    src/stellar-core --conf $HOME/core.cfg --newdb
-    src/stellar-core --conf $HOME/core.cfg --forcescp --newhist riak
+    # --newhist flag should run prior to --newdb!!!
+    src/stellar-core --conf $HOME/core.cfg --newhist riak
+    src/stellar-core --conf $HOME/core.cfg --newdb --forcescp
     src/stellar-core --conf $HOME/core.cfg
 else
     echo "ERROR"

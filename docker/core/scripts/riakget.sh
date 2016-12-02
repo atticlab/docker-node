@@ -6,5 +6,5 @@ if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ]; then
 fi
 
 KEY=$(echo $3 | base64)
-curl $1/buckets/$2/keys/$KEY -o $4
+curl -sf $1/buckets/$2/keys/$KEY -o $4
 exit
