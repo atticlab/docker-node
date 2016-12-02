@@ -8,6 +8,7 @@ services:
     image: crypto/core
     ports:
       - "${STELLAR_HTTP_PORT}:${STELLAR_HTTP_PORT}"
+      - "${STELLAR_PEER_PORT}:${STELLAR_PEER_PORT}"
     env_file:
       - .env
       - .core-cfg

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-HOST_REGEX='http(s?):\/\/((\w+\.)?\w+\.\w+|((2[0-5]{2}|1[0-9]{2}|[0-9]{1,2})\.){3}(2[0-5]{2}|1[0-9]{2}|[0-9]{1,2}))(\/)?(\:(\d){1,5})?'
+HOST_REGEX='(https?:\/\/(www\.)?[-a-zA-Z0-9]{2,256}\.[a-z]{2,6})|((https?:\/\/)?([0-9]{1,3}\.){3}([0-9]{1,3}))(\:?[0-9]{1,5})?(\/)?'
 GENSEED="$(docker run --rm crypto/core src/stellar-core --genseed)"
 SEED=${GENSEED:13:56}
 PUBLIC=${GENSEED:78:56}
@@ -48,6 +48,23 @@ strpos()
 
 while true
 do
+    read -ra key -p "Node seed [leave empty to generate]: "
+    if [[ $key == '' ]]; then
+        break
+    fi
+
+    valid="$(docker run --rm crypto/core src/stellar-core --checkseed $key)"
+    if [[ $valid == 0 ]]; then
+        echo "Error: seed is invalid. Try again."
+    else
+        SEED=$key
+        PUBLIC=$valid
+        break
+    fi
+done
+
+while true
+do
     read -ra key -p "Bank master key: "
     valid="$(docker run --rm crypto/core src/stellar-core --checkpub $key)"
     if [[ $valid == 1 ]]; then
@@ -78,25 +95,32 @@ do
     if [[ $peer == '' ]]; then
         if [[ $PEERS == '' ]]; then
             echo "You need to add at least one peer"
+            continue
         else
             break
         fi
     fi
 
     peer=${peer,,}
-    exists="$(strpos \"$PEERS\" \"$peer\")"
-
-    if [[ ! $peer =~ $HOST_REGEX ]]
-    then
+    if [[ ! $peer =~ $HOST_REGEX ]]; then
         echo "Error: Peer address [$peer] is not valid!"
         continue
-    elif [[ $exists != '' ]]; then
+    fi
+
+
+    peer=${peer#http://}
+    peer=${peer#https://}
+    peer=${peer%/}
+    peer=${peer// }
+    exists="$(strpos \"$PEERS\" \"$peer\")"
+    if [[ $exists != '' ]]; then
         echo "Error: Peer address [$peer] already added!"
         continue
     fi
 
     echo "$peer added to preferred!"
-    PEERS+=\"${peer// }\",
+
+    PEERS+=\"$peer\",
 done
 
 while true
@@ -109,8 +133,11 @@ do
         echo "Error: Peer address [$peer] is not valid!"
         continue
     fi
+    peer=${peer#http://}
+    peer=${peer#https://}
+    peer=${peer%%+(/)}
 
-    RIAK_HOST+=${peer// }
+    RIAK_HOST=${peer// }
     break
 done
 

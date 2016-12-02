@@ -17,7 +17,7 @@ for f in $(find ${DIRECTORY} -name '*.*');
 do
     DEST_PATH=$(echo ${f#$DIRECTORY} | sed 's/\//\%2f/g')
     RIAK_COMMAND="buckets/${BUCKET_NAME}/keys/${DEST_PATH}?returnbody=false"
-    FULL_CMD="curl -v -XPUT  --data-binary @${f} -H \"${HEADER}\" ${RIAK_HOST}${RIAK_COMMAND}"
+    FULL_CMD="curl -v -XPUT  --data-binary @${f} -H \"${HEADER}\" ${RIAK_HOST}/${RIAK_COMMAND}"
     #echo ${f};
 
     #run the command

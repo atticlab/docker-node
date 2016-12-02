@@ -37,15 +37,19 @@ validator: build
 	./scripts/setup.sh --is-validator
 
 validator-add: stop
-	@if [ ! -s ./.core-cfg ]; then \
-	 	echo "Error: node is not configured! Run make <agent|gate|validator> first"; \
-	else \
-		./scripts/validators.sh --add=${ARGS}; \
+	@if [ "${key}" = "" ]; then \
+	 	echo "Please use validator-add key='YOUR_KEY'"; \
+    elif [ ! -s ./.core-cfg ]; then \
+        echo "Error: node is not configured! Run make <agent|gate|validator> first"; \
+    else \
+        ./scripts/validators.sh --add=${key}; \
     fi
 
 validator-remove: stop
-	@if [ ! -s ./.core-cfg ]; then \
-	 	echo "Error: node is not configured! Run make <agent|gate|validator> first"; \
-	else \
-		./scripts/validators.sh --remove=${ARGS}; \
+	@if [ "${key}" = "" ]; then \
+	 	echo "Please use validator-remove key='YOUR_KEY'"; \
+    elif [ ! -s ./.core-cfg ]; then \
+        echo "Error: node is not configured! Run make <agent|gate|validator> first"; \
+    else \
+        ./scripts/validators.sh --remove=${key}; \
     fi
