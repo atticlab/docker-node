@@ -20,28 +20,35 @@ fi
 
 echo "[QUORUM_SET]"                                                             >> $HOME/core.cfg
 echo "THRESHOLD_PERCENT=65"                                                     >> $HOME/core.cfg
-if [ ! -z $VALIDATORS ]; then
+if [ ! -z $VALIDATORS ] && [ $NODE_IS_VALIDATOR == 'true' ] ; then
     echo "VALIDATORS=[${VALIDATORS:1:-1}, \"\$self\"]"                          >> $HOME/core.cfg
+elif [[ ! -z $VALIDATORS ]]; then
+    echo "VALIDATORS=[${VALIDATORS:1:-1}]"                                      >> $HOME/core.cfg
 elif [[ $NODE_IS_VALIDATOR == 'true' ]]; then
     echo "VALIDATORS=[\"\$self\"]"                                              >> $HOME/core.cfg
 fi
 
 echo "[HISTORY.riak]"                                                           >> $HOME/core.cfg
-echo "get=\"/scripts/riakget.sh $RIAK_HOST $RIAK_BUCKET $NETWORK_PASSPHRASE_{0} {1}\""      >> $HOME/core.cfg
-echo "put=\"/scripts/riakput.sh $RIAK_HOST $RIAK_BUCKET {0} $NETWORK_PASSPHRASE_{1}\""      >> $HOME/core.cfg
+echo "get=\"/scripts/riakget.sh $RIAK_HOST $RIAK_BUCKET {0} {1}\""      >> $HOME/core.cfg
+echo "put=\"/scripts/riakput.sh $RIAK_HOST $RIAK_BUCKET {0} {1}\""      >> $HOME/core.cfg
 echo "mkdir=\"mkdir -p {0}\""                                                               >> $HOME/core.cfg
 
 TABLE_EXISTS=`psql -d $DB_NAME -A -c "SELECT count(*) from information_schema.tables WHERE table_name = 'accounts'" | head -2 | tail -1`
-if [[ $TABLE_EXISTS == 1 ]]; then
-    echo "STARTING STELLAR CORE"
-    src/stellar-core --conf $HOME/core.cfg --forcescp
-    src/stellar-core --conf $HOME/core.cfg
-elif [[ $TABLE_EXISTS == 0 ]]; then
-    echo "INITIALIZING STELLAR DB"
+
+if [[ $TABLE_EXISTS == 0 ]]; then
+    echo "Initializing Dabatase"
     # --newhist flag should run prior to --newdb!!!
     src/stellar-core --conf $HOME/core.cfg --newhist riak
-    src/stellar-core --conf $HOME/core.cfg --newdb --forcescp
-    src/stellar-core --conf $HOME/core.cfg
+    src/stellar-core --conf $HOME/core.cfg --newdb
+elif [[ $TABLE_EXISTS == 1 ]]; then
+    echo "DB Exists. Starting Core"
 else
-    echo "ERROR"
+    echo "Core: No connection to postgres. Waiting..."
+    exit
 fi
+
+if [[ $NODE_IS_VALIDATOR == 'true' ]]; then
+    src/stellar-core --conf $HOME/core.cfg --forcescp
+fi
+
+src/stellar-core --conf $HOME/core.cfg

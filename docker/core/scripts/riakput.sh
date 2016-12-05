@@ -5,9 +5,11 @@ if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ]; then
     exit 1
 fi
 
-KEY=$(echo $4 | base64)
+KEY=$(echo -n $4 | sha256sum | cut -c -64)
 
 # run the command
-curl -sf -XPUT $1/buckets/$2/props -H "Content-Type: application/json" -d '{"props":{"allow_mult":'false'}}'
-curl -sf -XPUT --data-binary @$3 -H "Content-Type: multipart/mixed" $1/buckets/$2/keys/$KEY?returnbody=false
+echo "curl -v -XPUT --data-binary @$3 -H \"Content-Type: multipart/mixed\" $1/buckets/$2/keys/$KEY?returnbody=false"
+
+curl -v -XPUT $1/buckets/$2/props -H "Content-Type: application/json" -d '{"props":{"allow_mult":'false'}}'
+curl -v -XPUT --data-binary @$3 -H "Content-Type: multipart/mixed" "$1/buckets/$2/keys/$KEY?returnbody=false"
 exit
