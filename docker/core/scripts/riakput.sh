@@ -8,8 +8,8 @@ fi
 KEY=$(echo -n $4 | sha256sum | cut -c -64)
 
 # run the command
-echo "curl -v -XPUT --data-binary @$3 -H \"Content-Type: multipart/mixed\" $1/buckets/$2/keys/$KEY?returnbody=false"
+echo "curl -XPUT --data-binary @$3 -H \"Content-Type: multipart/mixed\" $1/buckets/$2/keys/$KEY?returnbody=false"
 
-curl -v -XPUT $1/buckets/$2/props -H "Content-Type: application/json" -d '{"props":{"allow_mult":'false'}}'
-curl -v -XPUT --data-binary @$3 -H "Content-Type: multipart/mixed" "$1/buckets/$2/keys/$KEY?returnbody=false"
+curl -XPUT $1/buckets/$2/props -H "Content-Type: application/json" -d '{"props":{"allow_mult":'false'}}'
+curl -XPUT --data-binary @$3 -H "Content-Type: multipart/mixed" "$1/buckets/$2/keys/$KEY?returnbody=false"
 exit

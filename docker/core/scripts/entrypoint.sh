@@ -6,12 +6,13 @@ rm -f $HOME/core.cfg
 echo "DATABASE=\"postgresql://dbname=$DB_NAME user=$PGUSER password=$PGPASSWORD host=$PGHOST\"" >> $HOME/core.cfg
 echo "HTTP_PORT=$STELLAR_HTTP_PORT"                                             >> $HOME/core.cfg
 echo "PEER_PORT=$STELLAR_PEER_PORT"                                             >> $HOME/core.cfg
-echo "PUBLIC_HTTP_PORT=false"                                                   >> $HOME/core.cfg
+echo "PUBLIC_HTTP_PORT=true"                                                    >> $HOME/core.cfg
 echo "BANK_MASTER_KEY=\"$BANK_MASTER_KEY\""                                     >> $HOME/core.cfg
 echo "BANK_COMMISSION_KEY=\"$BANK_COMMISSION_KEY\""                             >> $HOME/core.cfg
 echo "NETWORK_PASSPHRASE=\"$NETWORK_PASSPHRASE\""                               >> $HOME/core.cfg
 echo "NODE_SEED=\"$NODE_SEED self\""                                            >> $HOME/core.cfg
 echo "NODE_IS_VALIDATOR=$NODE_IS_VALIDATOR"                                     >> $HOME/core.cfg
+echo "CATCHUP_COMPLETE=true"                                                    >> $HOME/core.cfg
 echo "FAILURE_SAFETY=0"                                                         >> $HOME/core.cfg
 echo "UNSAFE_QUORUM=true"                                                       >> $HOME/core.cfg
 if [ ! -z "$PREFERRED_PEERS" ]; then
