@@ -1,3 +1,8 @@
+# System prerequisites
+- Debian 8
+- Git
+	
+
 # Node deployment 
 
 All settings are generated via sh script and stored in **.core-cfg** file in repository's root directory.
