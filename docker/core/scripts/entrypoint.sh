@@ -34,12 +34,22 @@ echo "get=\"/scripts/riakget.sh $RIAK_HOST $RIAK_BUCKET {0} {1} $RIAK_USER $RIAK
 echo "put=\"/scripts/riakput.sh $RIAK_HOST $RIAK_BUCKET {0} {1} $RIAK_USER $RIAK_PASS\""      >> $HOME/core.cfg
 echo "mkdir=\"mkdir -p {0}\""                                                                 >> $HOME/core.cfg
 
+echo "[HISTORY.local]"
+echo "get=\"cp /tmp/stellar-core/history/vs/{0} {1}\""
+echo "put=\"cp {0} /tmp/stellar-core/history/vs/{1}\""
+echo "mkdir=\"mkdir -p /tmp/stellar-core/history/vs/{0}\""
+
 TABLE_EXISTS=`psql -d $DB_NAME -A -c "SELECT count(*) from information_schema.tables WHERE table_name = 'accounts'" | head -2 | tail -1`
 
 if [[ $TABLE_EXISTS == 0 ]]; then
     echo "Initializing Dabatase"
     # --newhist flag should run prior to --newdb!!!
-    src/stellar-core --conf $HOME/core.cfg --newhist riak
+    src/stellar-core --conf $HOME/core.cfg --newhist local
+
+    if [[ $NODE_IS_VALIDATOR == 'true' ]]; then
+        src/stellar-core --conf $HOME/core.cfg --newhist riak
+    fi
+
     src/stellar-core --conf $HOME/core.cfg --newdb
 elif [[ $TABLE_EXISTS == 1 ]]; then
     echo "DB Exists. Starting Core"
