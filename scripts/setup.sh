@@ -9,6 +9,8 @@ MASTER_KEY=''
 COMISSION_KEY=''
 PEERS=''
 RIAK_HOST=''
+RIAK_USER=''
+RIAK_PASS=''
 
 # Parse args
 for i in "$@"
@@ -133,22 +135,45 @@ do
         echo "Error: Peer address [$peer] is not valid!"
         continue
     fi
-    peer=${peer#http://}
-    peer=${peer#https://}
     peer=${peer%%+(/)}
 
     RIAK_HOST=${peer// }
     break
 done
 
+while true
+do
+    read -ra key -p "Riak username [leave empty to skip]: "
+    if [[ $key == '' ]]; then
+        break
+    fi
+
+    RIAK_USER=$key
+    while true
+    do
+        IFS= read -s  -p "Riak password: " key
+        if [[ $key != '' ]]; then
+            RIAK_PASS=$key
+            break 2
+        fi
+
+        echo "Password cannot be empty"
+    done
+done
 
 rm -f ./.core-cfg
-
+echo $'\n'
 echo "**************************************************************************"
 echo "Node public key [$PUBLIC]"
 echo "**************************************************************************"
 
 echo "RIAK_HOST=$RIAK_HOST" >> ./.core-cfg
+if [[ $RIAK_USER != '' ]]; then
+    echo "RIAK_USER=$RIAK_USER" >> ./.core-cfg
+fi
+if [[ $RIAK_PASS != '' ]]; then
+    echo "RIAK_PASS=$RIAK_PASS" >> ./.core-cfg
+fi
 echo "NODE_SEED=$SEED" >> ./.core-cfg
 echo "NODE_IS_VALIDATOR=$IS_VALIDATOR" >> ./.core-cfg
 echo "BANK_MASTER_KEY=$MASTER_KEY" >> ./.core-cfg
