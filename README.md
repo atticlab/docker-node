@@ -1,3 +1,9 @@
+# System prerequisites
+- Debian 8
+- Git
+
+Run `./scripts/prerequisites.sh` to install all other dependencies
+
 # Node deployment 
 
 All settings are generated via sh script and stored in **.core-cfg** file in repository's root directory.
@@ -11,9 +17,9 @@ To start any node you first need to generate several keypairs (master key, bank 
 
 Run `make <gate|validator|agent>` depending on the node type you need and follow the wizard to create a config file. At the end you'll get a message similar to this:
 
-    **************************************************************************
-	Node public key [GDQMAICCDQOXRLV2HGCPVBKKIWL5PG4KNFXVVLKJEJ3QKEZVCQGTML4Q]
-	**************************************************************************
+>**************************************************************************
+>Node public key [GDQMAICCDQOXRLV2HGCPVBKKIWL5PG4KNFXVVLKJEJ3QKEZVCQGTML4Q]
+>**************************************************************************
 
 This public key can be added as validator to other nodes in the network.
 
