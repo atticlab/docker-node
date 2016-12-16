@@ -11,8 +11,8 @@ RUN git config --global url."https://attic_lab:2M42XDLqKcHBmtNECwQc@bitbucket.or
 
 WORKDIR /vhosts/horizon
 
-RUN gb vendor restore \
-	&& gb build
+RUN gb vendor restore
+RUN gb build
 
 COPY ./entrypoint.sh /
 
