@@ -16,9 +16,7 @@ services:
     depends_on:
       - postgres
     environment:
-      PGUSER: "${POSTGRES_USER}"
-      PGPASSWORD: "${POSTGRES_PASSWORD}"
-      PGHOST: postgres
+      DATABASE_URL: "postgres://dbname=stellar user=${POSTGRES_USER} password=${POSTGRES_PASSWORD} host=postgres"
 
   horizon:
     restart: always
