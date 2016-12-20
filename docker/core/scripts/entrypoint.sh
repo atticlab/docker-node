@@ -1,8 +1,9 @@
 #!/bin/bash
 
-rm -f $HOME/core.cfg
+DB_NAME="stellar"
 
-echo "DATABASE=\"$DATABASE_URL\""						>> $HOME/core.cfg
+rm -f $HOME/core.cfg
+echo "DATABASE=\"postgresql://dbname=$DB_NAME user=$PGUSER password=$PGPASSWORD host=$PGHOST\"" >> $HOME/core.cfg
 echo "HTTP_PORT=$STELLAR_HTTP_PORT"                                             >> $HOME/core.cfg
 echo "PEER_PORT=$STELLAR_PEER_PORT"                                             >> $HOME/core.cfg
 echo "PUBLIC_HTTP_PORT=true"                                                    >> $HOME/core.cfg
@@ -36,8 +37,8 @@ echo "[HISTORY.local]"                                                          
 echo "get=\"cp /tmp/stellar-core/history/vs/{0} {1}\""                                        >> $HOME/core.cfg
 echo "put=\"cp {0} /tmp/stellar-core/history/vs/{1}\""                                        >> $HOME/core.cfg
 echo "mkdir=\"mkdir -p /tmp/stellar-core/history/vs/{0}\""                                    >> $HOME/core.cfg
-cat $HOME/core.cfg
-TABLE_EXISTS=`psql -d stellar -A -c "SELECT count(*) from information_schema.tables WHERE table_name = 'accounts'" | head -2 | tail -1`
+
+TABLE_EXISTS=`psql -d $DB_NAME -A -c "SELECT count(*) from information_schema.tables WHERE table_name = 'accounts'" | head -2 | tail -1`
 
 if [[ $TABLE_EXISTS == 0 ]]; then
     echo "Initializing Dabatase"
