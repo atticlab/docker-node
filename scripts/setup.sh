@@ -7,6 +7,7 @@ PUBLIC=${GENSEED:78:56}
 IS_VALIDATOR='false'
 MASTER_KEY=''
 COMISSION_KEY=''
+GENERAL_KEY=''
 PEERS=''
 RIAK_HOST=''
 RIAK_USER=''
@@ -85,6 +86,18 @@ do
         echo "Error: comission key must be different from master key."
     elif [[ $valid == 1 ]]; then
         COMISSION_KEY=$key
+        break
+    else
+        echo "Error: key is invalid. Try again."
+    fi
+done
+
+while true
+do
+    read -ra key -p "General agent key: "
+    valid="$(docker run --rm crypto/core src/stellar-core --checkpub $key)"
+    if [[ $valid == 1 ]]; then
+        GENERAL_KEY=$key
         break
     else
         echo "Error: key is invalid. Try again."
@@ -178,6 +191,7 @@ echo "NODE_SEED=$SEED" >> ./.core-cfg
 echo "NODE_IS_VALIDATOR=$IS_VALIDATOR" >> ./.core-cfg
 echo "BANK_MASTER_KEY=$MASTER_KEY" >> ./.core-cfg
 echo "BANK_COMMISSION_KEY=$COMISSION_KEY" >> ./.core-cfg
+echo "GENERAL_AGENT_KEY=$GENERAL_KEY" >> ./.core-cfg
 
 if [[ $PEERS != '' ]]; then
     echo "PREFERRED_PEERS=[${PEERS::-1}]" >> ./.core-cfg

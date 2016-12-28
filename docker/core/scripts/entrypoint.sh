@@ -9,6 +9,7 @@ echo "PEER_PORT=$STELLAR_PEER_PORT"                                             
 echo "PUBLIC_HTTP_PORT=true"                                                    >> $HOME/core.cfg
 echo "BANK_MASTER_KEY=\"$BANK_MASTER_KEY\""                                     >> $HOME/core.cfg
 echo "BANK_COMMISSION_KEY=\"$BANK_COMMISSION_KEY\""                             >> $HOME/core.cfg
+echo "GENERAL_AGENT_KEY=\"$GENERAL_AGENT_KEY\""                                 >> $HOME/core.cfg
 echo "NETWORK_PASSPHRASE=\"$NETWORK_PASSPHRASE\""                               >> $HOME/core.cfg
 echo "NODE_SEED=\"$NODE_SEED self\""                                            >> $HOME/core.cfg
 echo "NODE_IS_VALIDATOR=$NODE_IS_VALIDATOR"                                     >> $HOME/core.cfg
