@@ -12,6 +12,6 @@ curl -L "https://github.com/docker/compose/releases/download/1.9.0/docker-compos
 chmod +x /usr/local/bin/docker-compose
 
 # Giving non-root access (optional)
-# groupadd docker
-# gpasswd -a ${USER} docker
-# service docker restart
+groupadd docker
+gpasswd -a attic docker
+service docker restart
