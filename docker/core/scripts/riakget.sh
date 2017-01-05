@@ -9,8 +9,8 @@ KEY=$(echo -n $3 | sha256sum | cut -c -64)
 AUTH=''
 
 if [[ "$5" != '' ]]; then
-    AUTH="--insecure -u $5:$6"
+    AUTH="--insecure --user $5:$6"
 fi
 
-curl $AUTH -f $1/buckets/$2/keys/$KEY -o $4
+curl --silent $AUTH --max-time 10 $1/buckets/$2/keys/$KEY -o $4
 exit

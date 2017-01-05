@@ -9,7 +9,7 @@ KEY=$(echo -n $4 | sha256sum | cut -c -64)
 AUTH=''
 
 if [[ "$5" != '' ]]; then
-    AUTH="--insecure -u $5:$6"
+    AUTH="--insecure --user $5:$6"
 fi
 
 curl $AUTH -XPUT $1/buckets/$2/props -H "Content-Type: application/json" -d '{"props":{"allow_mult":'false'}}'
