@@ -12,5 +12,5 @@ if [[ "$5" != '' ]]; then
     AUTH="--insecure --user $5:$6"
 fi
 
-curl --silent $AUTH --max-time 10 $1/buckets/$2/keys/$KEY -o $4
+curl --fail --silent $AUTH --max-time 10 $1/buckets/$2/keys/$KEY -o $4
 exit
