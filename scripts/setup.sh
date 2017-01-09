@@ -135,7 +135,7 @@ do
 
     echo "$peer added to preferred!"
 
-    PEERS+=\"$peer\",
+    PEERS+=\"$peer:11625\",
 done
 
 while true
