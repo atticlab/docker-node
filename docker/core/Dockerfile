@@ -9,7 +9,7 @@ RUN apt-get update \
 WORKDIR /vhosts
 
 RUN git config --global url."https://attic_lab:2M42XDLqKcHBmtNECwQc@bitbucket.org/".insteadOf "https://bitbucket.org/"
-RUN git clone -b nbu https://bitbucket.org/atticlab/smart-core.git core
+RUN git clone -b feature/external https://bitbucket.org/atticlab/smart-core.git core
 
 WORKDIR /vhosts/core
 
