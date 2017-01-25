@@ -3,7 +3,7 @@
 echo "*** CREATING DATABASE ***"
 
 # create default database
-gosu postgres psql --username postgres <<EOSQL
+psql --username postgres <<EOSQL
   CREATE DATABASE horizon;
   CREATE DATABASE stellar;
   GRANT ALL PRIVILEGES ON DATABASE horizon TO "$POSTGRES_USER";
