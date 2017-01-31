@@ -1,5 +1,8 @@
 FROM golang:1.6
 
+ENV http_proxy http://10.78.17.6:3128
+ENV https_proxy http://10.78.17.6:3128
+
 RUN apt-get update && apt-get install -y \
 	git \
 	&& go get github.com/constabulary/gb/...
