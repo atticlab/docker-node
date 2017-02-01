@@ -30,4 +30,7 @@ RUN mkdir /scripts
 
 COPY ./scripts /scripts
 
+ENV http_proxy=
+ENV https_proxy=
+
 CMD ["/scripts/entrypoint.sh"]
