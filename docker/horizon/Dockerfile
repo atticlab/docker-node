@@ -19,4 +19,7 @@ RUN gb build
 
 COPY ./entrypoint.sh /
 
+ENV http_proxy=
+ENV https_proxy=
+
 CMD ["/entrypoint.sh"]
