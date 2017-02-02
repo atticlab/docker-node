@@ -140,12 +140,12 @@ done
 
 while true
 do
-    read -ra peer -p "Riak Host: "
+    read -ra peer -p "Riak Host: (with protocol and port)"
     peer=${peer,,}
 
     if [[ ! $peer =~ $HOST_REGEX ]]
     then
-        echo "Error: Peer address [$peer] is not valid!"
+        echo "Error: riak host [$peer] is not valid!"
         continue
     fi
     peer=${peer%%+(/)}
