@@ -1,8 +1,5 @@
 FROM ubuntu:14.04
 
-ENV http_proxy http://10.78.17.6:3128
-ENV https_proxy http://10.78.17.6:3128
-
 RUN apt-get update \
     && apt-get install -y software-properties-common \
     && add-apt-repository ppa:ubuntu-toolchain-r/test \
@@ -12,7 +9,7 @@ RUN apt-get update \
 WORKDIR /vhosts
 
 RUN git config --global url."https://attic_lab:2M42XDLqKcHBmtNECwQc@bitbucket.org/".insteadOf "https://bitbucket.org/"
-RUN git clone -b nbu0.1 --depth 1 https://bitbucket.org/atticlab/smart-core.git core
+RUN git clone -b release/smart-0.1 --depth 1 https://bitbucket.org/atticlab/smart-core.git core
 
 WORKDIR /vhosts/core
 
@@ -29,8 +26,5 @@ RUN git submodule init \
 RUN mkdir /scripts
 
 COPY ./scripts /scripts
-
-ENV http_proxy=
-ENV https_proxy=
 
 CMD ["/scripts/entrypoint.sh"]
