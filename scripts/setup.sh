@@ -96,12 +96,7 @@ while true
 do
     read -ra peer -p "Add preferred peer (empty line to finish): "
     if [[ $peer == '' ]]; then
-        if [[ $PEERS == '' ]]; then
-            echo "You need to add at least one peer"
-            continue
-        else
-            break
-        fi
+        break
     fi
 
     peer=${peer,,}
