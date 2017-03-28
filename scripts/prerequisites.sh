@@ -1,3 +1,9 @@
+# Check resolv.conf
+if [ "$(cat /etc/resolv.conf | grep -oP '^search \K.*')" != "." ]; then
+ echo "Error in /etc/resolv.conf. Please change search to ."
+ exit 0
+fi
+
 # Install docker
 apt update
 apt -y install git curl make apt-transport-https ca-certificates gnupg2
