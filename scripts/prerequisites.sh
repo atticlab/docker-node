@@ -1,5 +1,6 @@
 # Check resolv.conf
-if [ "$(cat /etc/resolv.conf | grep -oP '^search \K.*')" != "." ]; then
+RESOLV=$(cat /etc/resolv.conf | grep -oP '^search \K.*')
+if [ "$RESOLV" != "" ] && [ "$RESOLV" != "." ]; then
  echo "Error in /etc/resolv.conf. Please change search to ."
  exit 0
 fi
