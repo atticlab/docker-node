@@ -6,12 +6,13 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /vhosts
 
-RUN git config --global url."https://attic_lab:DhDXz6QS7338EwjccjdA@bitbucket.org/".insteadOf "https://bitbucket.org/" \
-	&& git clone -b smart-0.1.1 --depth 1 https://bitbucket.org/atticlab/horizon.git horizon
+RUN git config --global url."https://attic_lab:hVcJQp9eFdYyzemTGGXK@bitbucket.org/".insteadOf "https://bitbucket.org/" \
+	&& git clone -b smar2.0 --depth 1 https://bitbucket.org/atticlab/horizon.git horizon
 
 WORKDIR /vhosts/horizon
 
 RUN gb vendor restore
+RUN go get github.com/visionmedia/go-debug
 RUN gb build
 
 COPY ./entrypoint.sh /
