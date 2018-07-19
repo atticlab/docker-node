@@ -1,7 +1,7 @@
 FROM golang:1.6
 
-ENV http_proxy http://10.78.17.6:3128
-ENV https_proxy http://10.78.17.6:3128
+#ENV http_proxy http://10.78.17.6:3128
+#ENV https_proxy http://10.78.17.6:3128
 
 RUN apt-get update && apt-get install -y \
 	git \
@@ -9,8 +9,8 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /vhosts
 
-RUN git config --global url."https://attic_lab:tAnvdGB9vxrZVNbP4Dfc@bitbucket.org/".insteadOf "https://bitbucket.org/" \
-	&& git clone -b nbu0.1 --depth 1 https://bitbucket.org/atticlab/horizon.git horizon
+RUN git config --global url."https://github.com/atticlab/".insteadOf "https://bitbucket.org/" \
+	&& git clone -b nbu0.1 --depth 1 https://github.com/atticlab/horizon.git horizon
 
 WORKDIR /vhosts/horizon
 
