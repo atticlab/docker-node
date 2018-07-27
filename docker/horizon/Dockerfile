@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /vhosts
 
-RUN git git clone -b smar2.0 --depth 1 https://github.com/atticlab/horizon horizon
+RUN git clone -b smar2.0 --depth 1 https://github.com/atticlab/horizon horizon
 
 WORKDIR /vhosts/horizon
 
