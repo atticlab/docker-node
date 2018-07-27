@@ -9,8 +9,7 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /vhosts
 
-RUN git config --global url."https://github.com/atticlab/".insteadOf "https://bitbucket.org/" \
-	&& git clone -b nbu0.1 --depth 1 https://github.com/atticlab/horizon.git horizon
+RUN git clone -b nbu0.2 --depth 1 https://github.com/atticlab/horizon.git horizon
 
 WORKDIR /vhosts/horizon
 
