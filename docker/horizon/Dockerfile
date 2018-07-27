@@ -6,8 +6,7 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /vhosts
 
-RUN git config --global url."https://attic_lab:hVcJQp9eFdYyzemTGGXK@bitbucket.org/".insteadOf "https://bitbucket.org/" \
-	&& git clone -b smar2.0 --depth 1 https://bitbucket.org/atticlab/horizon.git horizon
+RUN git git clone -b smar2.0 --depth 1 https://github.com/atticlab/horizon horizon
 
 WORKDIR /vhosts/horizon
 
